@@ -1,85 +1,79 @@
-import { generateWAMessageFromContent } from '@whiskeysockets/baileys';
-import * as fs from 'fs';
+import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 
-const handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
+const handler = async (m, { conn, text, participants }) => {
   try {
-    const users = participants.map((u) => conn.decodeJid(u.id));
-    const watermark = '\n\n> *_SOFI - BOT_*';
+    const users = participants.map(u => conn.decodeJid(u.id))
+    const q = m.quoted ? m.quoted : m
+    const c = m.quoted ? await m.getQuotedObj() : m
+    const mime = (q.msg || q).mimetype || ''
+    const isMedia = /image|video|sticker|audio/.test(mime)
 
-    const q = m.quoted ? m.quoted : m || m.text || m.sender;
-    const c = m.quoted ? await m.getQuotedObj() : m.msg || m.text || m.sender;
-
-    const repliedText = m.quoted && m.quoted.text ? m.quoted.text.trim() : '';
-    let messageText = (repliedText ? `${repliedText}\n` : '') + (text || '');
-
-    if (!m.quoted && !m.isMedia && !messageText.includes(watermark)) {
-      messageText += watermark;
-    }
-
-    const msg = conn.cMod(
-      m.chat,
-      generateWAMessageFromContent(
-        m.chat,
-        { [m.quoted ? q.mtype : 'extendedTextMessage']: m.quoted ? c.message[q.mtype] : { text: '' || c } },
-        { quoted: m, userJid: conn.user.id }
-      ),
-      messageText,
-      conn.user.jid,
-      { mentions: users }
-    );
-
-    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
-  } catch {
-    const users = participants.map((u) => conn.decodeJid(u.id));
-    const quoted = m.quoted ? m.quoted : m;
-    const mime = (quoted.msg || quoted).mimetype || '';
-    const isMedia = /image|video|sticker|audio/.test(mime);
-    const watermark = '\n\n> *_SOFI BOT_*';
+    const originalCaption = (q.msg?.caption || q.text || '').trim()
+    const finalCaption = text.trim() ? text : originalCaption
 
     if (isMedia) {
-      const mediax = await quoted.download?.();
-      const options = { mentions: users, quoted: m };
+      const media = await q.download()
 
-      if (quoted.mtype === 'imageMessage') {
-        conn.sendMessage(m.chat, { image: mediax, caption: (text || '') + watermark, ...options });
-      } else if (quoted.mtype === 'videoMessage') {
-        conn.sendMessage(m.chat, { video: mediax, caption: text || '', mimetype: 'video/mp4', ...options });
+      if (q.mtype === 'imageMessage') {
+        await conn.sendMessage(m.chat, {
+          image: media,
+          caption: finalCaption,
+          mentions: users
+        }, { quoted: m })
+
+      } else if (q.mtype === 'videoMessage') {
+        await conn.sendMessage(m.chat, {
+          video: media,
+          caption: finalCaption,
+          mentions: users,
+          mimetype: 'video/mp4'
+        }, { quoted: m })
+
+      } else if (q.mtype === 'audioMessage') {
+        await conn.sendMessage(m.chat, {
+          audio: media,
+          mimetype: 'audio/mpeg',
+          fileName: 'audio.mp3',
+          mentions: users
+        }, { quoted: m })
+
+      } else if (q.mtype === 'stickerMessage') {
+        await conn.sendMessage(m.chat, {
+          sticker: media,
+          mentions: users
+        }, { quoted: m })
       }
+
     } else {
-      if (quoted.mtype === 'audioMessage') {
-        conn.sendMessage(m.chat, { audio: quoted.download ? await quoted.download() : null, caption: '', mimetype: 'audio/mpeg', fileName: `Hidetag.mp3`, ...options });
-      } else if (quoted.mtype === 'stickerMessage') {
-        conn.sendMessage(m.chat, { sticker: quoted.download ? await quoted.download() : null, ...options });
-      } else {
-        const more = String.fromCharCode(8206);
-        const masss = more.repeat(850) + watermark;
-
-        await conn.relayMessage(
+      // Si no es media, manda solo texto con mención
+      const msg = conn.cMod(
+        m.chat,
+        generateWAMessageFromContent(
           m.chat,
-          {
-            extendedTextMessage: {
-              text: `${masss}`,
-              contextInfo: {
-                mentionedJid: users,
-                externalAdReply: {
-                  thumbnail: img,
-                  sourceUrl: canal
-                }
-              }
-            }
-          },
-          {}
-        );
-      }
+          { [q.mtype || 'extendedTextMessage']: q.message?.[q.mtype] || { text: finalCaption } },
+          { quoted: m, userJid: conn.user.id }
+        ),
+        finalCaption,
+        conn.user.jid,
+        { mentions: users }
+      )
+      await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
     }
+
+  } catch (e) {
+    const users = participants.map(u => conn.decodeJid(u.id))
+    const fallbackText = text || ' .n'
+    await conn.sendMessage(m.chat, {
+      text: fallbackText,
+      mentions: users
+    }, { quoted: m })
   }
-};
+}
 
-handler.help = ['hidetag'];
-handler.tags = ['group'];
-handler.command = /^(hidetag|notify|notificar|noti|n|hidetah|hidet)$/i;
+handler.help = ['hidetag']
+handler.tags = ['group']
+handler.command = /^(hidetag|notify|notificar|noti|n|hidetah|hidet)$/i
+handler.group = true
+handler.admin = true
 
-handler.group = true;
-handler.admin = true;
-
-export default handler;
+export default handler
