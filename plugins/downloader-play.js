@@ -72,7 +72,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     // Enviar información del video (mismo diseño)
     await conn.sendMessage(m.chat, {
-      text: `01:27 ━━━━━⬤────── 05:48\n*⇄ㅤ      ◁        ❚❚        ▷        ↻*\n╴𝗝𝗮𝘇𝗸𝗼𝗽𝗽7 𝗯𝗼𝘁`,
+      text: `01:27 ━━━━━⬤────── 05:48\n*⇄ㅤ      ◁        ❚❚        ▷        ↻*\n╴Alee 𝗯𝗼𝘁`,
       contextInfo: {
         externalAdReply: {
           title: video.title.slice(0, 60),
