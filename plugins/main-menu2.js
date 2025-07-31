@@ -1,5 +1,5 @@
 let handler = async (m, { conn }) => {
-let img = 'https://i.ibb.co/4jft6vs/file.jpg' 
+let img = 'https://qu.ax/xfFfw.jpg' 
 let texto = `*_M E N Ú - A U D I O S_* 🗣️
 「 *.on audios* 」  
 
