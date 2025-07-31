@@ -56,7 +56,7 @@ newsletterName: '',
 },
 externalAdReply: { 
 showAdAttribution: true,
-title: '𝑺𝑶𝑭𝑰 - 𝑩𝑶𝑻',
+title: '𝗔𝗹𝗲𝗲 - 𝗕𝗼𝘁',
 body: '',
 previewType: "PHOTO",
 thumbnailUrl: 'https://qu.ax/xfFfw.jpg',
