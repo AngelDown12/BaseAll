@@ -1,16 +1,16 @@
 import fetch from "node-fetch";
 import yts from "yt-search";
 
-// Lista de APIs prioritarias (la de vreden primero)
+// Lista de APIs prioritarias
 const APIS = [
   {
     name: "vreden",
-    url: (videoUrl) => `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(videoUrl)}&quality=64`, // Cambié la calidad a 64 kbps
+    url: (videoUrl) => `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(videoUrl)}&quality=64`,
     extract: (data) => data?.result?.download?.url
   },
   {
     name: "zenkey",
-    url: (videoUrl) => `https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${encodeURIComponent(videoUrl)}&quality=64`, // Añadí calidad baja
+    url: (videoUrl) => `https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${encodeURIComponent(videoUrl)}&quality=64`,
     extract: (data) => data?.result?.download?.url
   },
   {
@@ -18,34 +18,28 @@ const APIS = [
     url: (videoUrl) => `https://yt1s.io/api/ajaxSearch?q=${encodeURIComponent(videoUrl)}`,
     extract: async (data) => {
       const k = data?.links?.mp3?.auto?.k;
-      return k ? `https://yt1s.io/api/ajaxConvert?vid=${data.vid}&k=${k}&quality=64` : null; // Ajusté la calidad en la URL
+      return k ? `https://yt1s.io/api/ajaxConvert?vid=${data.vid}&k=${k}&quality=64` : null;
     }
   }
 ];
 
-// Función mejorada para obtener audio
 const getAudioUrl = async (videoUrl) => {
   let lastError = null;
 
   for (const api of APIS) {
     try {
-      console.log(`Probando API: ${api.name}`);
       const apiUrl = api.url(videoUrl);
-      const response = await fetch(apiUrl, { timeout: 5000 }); // Timeout de 5 segundos
+      const response = await fetch(apiUrl, { timeout: 5000 });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = await response.json();
       const audioUrl = await api.extract(data);
 
-      if (audioUrl) {
-        console.log(`Éxito con API: ${api.name}`);
-        return audioUrl;
-      }
+      if (audioUrl) return audioUrl;
     } catch (error) {
-      console.error(`Error con API ${api.name}:`, error.message);
       lastError = error;
-      continue; // Intentar con la siguiente API
+      continue;
     }
   }
 
@@ -60,47 +54,41 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     await conn.sendMessage(m.chat, { react: { text: "🕒", key: m.key } });
 
-    // Búsqueda más rápida con límite de resultados
     const searchResults = await yts({ query: text.trim(), hl: 'es', gl: 'ES' });
     const video = searchResults.videos[0];
     if (!video) throw new Error("No se encontró el video");
 
-    // Verificar duración (max 10 minutos para evitar audios largos)
     if (video.seconds > 600) {
       throw "❌ El audio es muy largo (máximo 10 minutos)";
     }
 
+    // ▶️ Mensaje estilo tarjeta como en la imagen
     await conn.sendMessage(m.chat, {
-  image: { url: video.thumbnail },
-  caption: `🎵 *Título:* ${video.title}
+      image: { url: video.thumbnail },
+      caption: `🎵 *Título:* ${video.title}
 📺 *Canal:* ${video.author.name}
 ⏱ *Duración:* ${video.timestamp}
 👀 *Vistas:* ${video.views.toLocaleString()}
 📅 *Publicado:* ${video.ago || "-"}
 🌐 *Enlace:* ${video.url}`,
-  contextInfo: {
-    externalAdReply: {
-      title: video.title,
-      body: video.author.name,
-      thumbnailUrl: video.thumbnail,
-      mediaType: 1,
-      renderLargerThumbnail: true,
-      showAdAttribution: true,
-      sourceUrl: video.url
-    }
-  }
-}, { quoted: m });
+      contextInfo: {
+        externalAdReply: {
+          title: video.title,
+          body: video.author.name,
+          thumbnailUrl: video.thumbnail,
+          mediaType: 1,
+          renderLargerThumbnail: true,
+          showAdAttribution: true,
+          sourceUrl: video.url
+        }
+      }
+    }, { quoted: m });
 
-    // Obtener audio (con reintentos)
-    let audioUrl;
-    try {
-      audioUrl = await getAudioUrl(video.url);
-    } catch (e) {
-      console.error("Error al obtener audio:", e);
-      throw "⚠️ Error al procesar el audio. Intenta con otra canción";
-    }
+    // Espera 2 segundos antes de mandar el audio
+    await new Promise(res => setTimeout(res, 2000));
 
-    // Enviar audio optimizado
+    // 🎧 Obtener y enviar el audio
+    const audioUrl = await getAudioUrl(video.url);
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: "audio/mpeg",
