@@ -74,11 +74,11 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await conn.sendMessage(m.chat, {
     image: { url: video.thumbnail },
     caption: `🎵 *Título:* ${video.title}
-📺 *Canal:* ${video.author.name}
-⏱ *Duración:* ${video.timestamp}
-👀 *Vistas:* ${video.views.toLocaleString()}
-📅 *Publicado:* ${video.ago || "-"}
-🌐 *Enlace:* ${video.url}`
+📺 Canal: ${video.author.name}
+⏱ Duración: ${video.timestamp}
+👀 Vistas: ${video.views.toLocaleString()}
+📅 Publicado: ${video.ago || "-"}
+🌐 Enlace: ${video.url}`
   }, { quoted: m });
 
     // Obtener audio (con reintentos)
