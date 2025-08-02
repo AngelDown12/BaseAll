@@ -73,7 +73,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     // Enviar información del video (mismo diseño)
     await conn.sendMessage(m.chat, {
     image: { url: video.thumbnail },
-    caption: `🎵 *Título:* ${video.title}
+    caption: `🎵 Título: ${video.title}
 📺 Canal: ${video.author.name}
 ⏱ Duración: ${video.timestamp}
 👀 Vistas: ${video.views.toLocaleString()}
