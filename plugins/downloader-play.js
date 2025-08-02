@@ -70,21 +70,26 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       throw "❌ El audio es muy largo (máximo 10 minutos)";
     }
 
-    // Enviar información del video (mismo diseño)
     await conn.sendMessage(m.chat, {
-      text: `01:27 ━━━━━⬤────── 05:48\n*⇄ㅤ      ◁        ❚❚        ▷        ↻*\n╴Alee 𝗯𝗼𝘁`,
-      contextInfo: {
-        externalAdReply: {
-          title: video.title.slice(0, 60),
-          body: "",
-          thumbnailUrl: video.thumbnail,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          showAdAttribution: true,
-          sourceUrl: video.url
-        }
-      }
-    }, { quoted: m });
+  image: { url: video.thumbnail },
+  caption: `🎵 *Título:* ${video.title}
+📺 *Canal:* ${video.author.name}
+⏱ *Duración:* ${video.timestamp}
+👀 *Vistas:* ${video.views.toLocaleString()}
+📅 *Publicado:* ${video.ago || "-"}
+🌐 *Enlace:* ${video.url}`,
+  contextInfo: {
+    externalAdReply: {
+      title: video.title,
+      body: video.author.name,
+      thumbnailUrl: video.thumbnail,
+      mediaType: 1,
+      renderLargerThumbnail: true,
+      showAdAttribution: true,
+      sourceUrl: video.url
+    }
+  }
+}, { quoted: m });
 
     // Obtener audio (con reintentos)
     let audioUrl;
