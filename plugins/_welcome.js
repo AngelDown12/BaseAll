@@ -3,29 +3,38 @@ import { WAMessageStubType } from '@whiskeysockets/baileys'
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return true
 
-  const imageUrl = 'https://qu.ax/xfFfw.jpg'
+  const imageUrl = 'https://files.catbox.moe/eivdme.jpg'
+  const welcomeAudioUrl = 'https://qu.ax/sjtTL.opus'
+  const byeAudioUrl = 'https://qu.ax/LhbNi.opus'
+
   let chat = global.db.data.chats[m.chat]
   let user = `@${m.messageStubParameters[0].split('@')[0]}`
   let groupName = groupMetadata.subject
   let groupDesc = groupMetadata.desc || 'Sin descripción'
 
-  // BIENVENIDA simple: "Hola @user"
+  // BIENVENIDA
   if (chat.bienvenida && m.messageStubType == 27) {
     let welcome = chat.sWelcome
       ? chat.sWelcome
           .replace(/@user/g, user)
           .replace(/@group/g, groupName)
           .replace(/@desc/g, groupDesc)
-      : `Hola ${user}`
+      : `┊» 𝙋𝙊𝙍 𝙁𝙄𝙉 𝙇𝙇𝙀𝙂𝘼𝙎\n┊» ${groupName}\n┊» ${user}\n┊» 𝗹𝗲𝗲 𝗹𝗮 𝗱𝗲𝘀𝗰𝗿𝗶𝗽𝘁𝗶𝗼𝗻\n\n» Siéntete como en tu casa, aplasta el culo!!!`
 
     await conn.sendMessage(m.chat, {
       image: { url: imageUrl },
       caption: welcome,
       mentions: [m.messageStubParameters[0]]
     })
+
+    await conn.sendMessage(m.chat, {
+      audio: { url: welcomeAudioUrl },
+      mimetype: 'audio/ogg; codecs=opus',
+      ptt: true
+    })
   }
 
-  // DESPEDIDA (se mantiene igual)
+  // DESPEDIDA
   if (chat.bienvenida && (m.messageStubType == 28 || m.messageStubType == 32)) {
     const msgsBye = [
       `*╭┈┈┈┈┈┈┈┈┈┈┈┈┈≫*\n*┊* ${user}\n*┊𝗧𝗨 𝗔𝗨𝗦𝗘𝗡𝗖𝗜𝗔 𝗙𝗨𝗘 𝗖𝗢𝗠𝗢 𝗨𝗡 𝗤𝗟𝗢,*\n*┊𝗖𝗢𝗡 𝗢𝗟𝗢𝗥 𝗔 𝗠𝗥𝗗!!* 👿\n*╰┈┈┈┈┈┈┈┈┈┈┈┈┈≫*`,
@@ -45,6 +54,12 @@ export async function before(m, { conn, participants, groupMetadata }) {
       image: { url: imageUrl },
       caption: bye,
       mentions: [m.messageStubParameters[0]]
+    })
+
+    await conn.sendMessage(m.chat, {
+      audio: { url: byeAudioUrl },
+      mimetype: 'audio/ogg; codecs=opus',
+      ptt: true
     })
   }
 }
