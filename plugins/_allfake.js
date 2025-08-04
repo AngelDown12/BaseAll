@@ -9,7 +9,7 @@ let img = catalogo
     forwardedNewsletterMessageInfo: {
       newsletterJid: "120363401389725319@newsletter",
       serverMessageId: 100,
-      newsletterName: '𝐁𝐔𝐔 𝐁𝐎𝐓 🔮',
+      newsletterName: 'zz',
     },
             externalAdReply: {
                                     showAdAttribution: true,
@@ -52,11 +52,11 @@ isForwarded: true,
 forwardedNewsletterMessageInfo: {
 newsletterJid: "120363401389725319@newsletter",
 serverMessageId: 100,
-newsletterName: '𝐁𝐔𝐔 𝐁𝐎𝐓 🔮',
+newsletterName: 'zz',
 },
 externalAdReply: { 
 showAdAttribution: true,
-title: '𝐁𝐔𝐔 - 𝐁𝐎𝐓 🔮',
+title: 'zz',
 body: '𝐂𝐫𝐢𝐬𝐭𝐢𝐚𝐧 🕷️',
 previewType: "PHOTO",
 thumbnailUrl: 'https://files.catbox.moe/5k7vwl.jpg',
