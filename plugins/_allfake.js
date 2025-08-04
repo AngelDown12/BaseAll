@@ -1,68 +1,68 @@
 import fetch from 'node-fetch'
 
 export async function before(m, { conn }) {
-//let img = await (await fetch(`https://qu.ax/xfFfw.jpg`)).buffer()
+//let img = await (await fetch(`https://files.catbox.moe/5k7vwl.jpg`)).buffer()
 let img = catalogo
  global.fake = {
     contextInfo: {
-    	isForwarded: true,
+            isForwarded: true,
     forwardedNewsletterMessageInfo: {
-      newsletterJid: "",
+      newsletterJid: "120363401389725319@newsletter",
       serverMessageId: 100,
-      newsletterName: '',
+      newsletterName: '𝐁𝐔𝐔 𝐁𝐎𝐓 🔮',
     },
-	    externalAdReply: {
-				    showAdAttribution: true,
-					title: botname,
-					body: 'Hola',
-					mediaUrl: null,
-					description: null,
-					previewType: "PHOTO",
-					thumbnailUrl: 'https://qu.ax/xfFfw.jpg',
-		           sourceUrl: canal,
-		           mediaType: 1,
+            externalAdReply: {
+                                    showAdAttribution: true,
+                                        title: botname,
+                                        body: 'Hola',
+                                        mediaUrl: null,
+                                        description: null,
+                                        previewType: "PHOTO",
+                                        thumbnailUrl: 'https://files.catbox.moe/5k7vwl.jpg',
+                           sourceUrl: canal,
+                           mediaType: 1,
                    renderLargerThumbnail: false
-	    },
+            },
     },
   }
 
  global.adReply = {
-	    contextInfo: { 
+            contextInfo: { 
              forwardingScore: 9999, 
                  isForwarded: false, 
                     externalAdReply: {
-				    showAdAttribution: true,
-					title: botname,
-					body: textbot,
-					mediaUrl: null,
-					description: null,
-					previewType: "PHOTO",
-					thumbnailUrl: img,
+                                    showAdAttribution: true,
+                                        title: botname,
+                                        body: textbot,
+                                        mediaUrl: null,
+                                        description: null,
+                                        previewType: "PHOTO",
+                                        thumbnailUrl: img,
                     thumbnail: img,
-		           sourceUrl: canal,
-		           mediaType: 1,
+                           sourceUrl: canal,
+                           mediaType: 1,
                    renderLargerThumbnail: true
-				}
-			}
-		}
+                                }
+                        }
+                }
 
 global.rcanal = {
 contextInfo: {
 isForwarded: true,
 forwardedNewsletterMessageInfo: {
-newsletterJid: "",
+newsletterJid: "120363401389725319@newsletter",
 serverMessageId: 100,
-newsletterName: '',
+newsletterName: '𝐁𝐔𝐔 𝐁𝐎𝐓 🔮',
 },
 externalAdReply: { 
 showAdAttribution: true,
-title: '𝗔𝗹𝗲𝗲 - 𝗕𝗼𝘁',
-body: '',
+title: '𝐁𝐔𝐔 - 𝐁𝐎𝐓 🔮',
+body: '𝐂𝐫𝐢𝐬𝐭𝐢𝐚𝐧 🕷️',
 previewType: "PHOTO",
-thumbnailUrl: 'https://qu.ax/xfFfw.jpg',
-sourceUrl: '',
+thumbnailUrl: 'https://files.catbox.moe/5k7vwl.jpg',
+sourceUrl: 'https://www.instagram.com/baki_hm66?igsh=cHk1eW1uZXF2ZWsy',
 mediaType: 1,
 renderLargerThumbnail: false
 },},}
-	
+
 }
