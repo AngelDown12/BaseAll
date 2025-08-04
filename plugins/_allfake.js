@@ -1,15 +1,15 @@
 import fetch from 'node-fetch'
 
 export async function before(m, { conn }) {
-//let img = await (await fetch(`https://files.catbox.moe/5k7vwl.jpg`)).buffer()
+//let img = await (await fetch(`https://qu.ax/xfFfw.jpg`)).buffer()
 let img = catalogo
  global.fake = {
     contextInfo: {
             isForwarded: true,
     forwardedNewsletterMessageInfo: {
-      newsletterJid: "120363401389725319@newsletter",
+      newsletterJid: "",
       serverMessageId: 100,
-      newsletterName: 'zz',
+      newsletterName: '',
     },
             externalAdReply: {
                                     showAdAttribution: true,
@@ -18,7 +18,7 @@ let img = catalogo
                                         mediaUrl: null,
                                         description: null,
                                         previewType: "PHOTO",
-                                        thumbnailUrl: 'https://files.catbox.moe/5k7vwl.jpg',
+                                        thumbnailUrl: 'https://qu.ax/xfFfw.jpg',
                            sourceUrl: canal,
                            mediaType: 1,
                    renderLargerThumbnail: false
@@ -50,17 +50,17 @@ global.rcanal = {
 contextInfo: {
 isForwarded: true,
 forwardedNewsletterMessageInfo: {
-newsletterJid: "120363401389725319@newsletter",
+newsletterJid: "",
 serverMessageId: 100,
-newsletterName: 'zz',
+newsletterName: '',
 },
 externalAdReply: { 
 showAdAttribution: true,
-title: 'zz',
-body: '𝐂𝐫𝐢𝐬𝐭𝐢𝐚𝐧 🕷️',
+title: '𝗔𝗹𝗲𝗲 - 𝗕𝗼𝘁',
+body: '',
 previewType: "PHOTO",
-thumbnailUrl: 'https://files.catbox.moe/5k7vwl.jpg',
-sourceUrl: 'https://www.instagram.com/baki_hm66?igsh=cHk1eW1uZXF2ZWsy',
+thumbnailUrl: 'https://qu.ax/xfFfw.jpg',
+sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
 },},}
